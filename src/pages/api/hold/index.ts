@@ -18,6 +18,7 @@ export default async function handler(
   if (method === "POST") {
     const { body } = request;
 
+    console.log("TO NA API");
     const data = await prisma.hold.create({
       data: body,
     });

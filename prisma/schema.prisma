@@ -15,4 +15,7 @@ datasource db {
 model Hold {
   id String @id @default(uuid())
   token String 
+  token_quantity String
+  buy_date String
+  amount_paid String
 }
