@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  relationMode      = "prisma"
+}
+
+model User {
+  id          String     @id @default(uuid())
+  username    String     @unique
+  password    String
+  email       String     @unique
+  tokens_hold Position[]
+  history     History[]
+
+  @@index([username], map: "user_username_idx")
+  @@map("users")
+}
+
+model Position {
+  id             String @id @default(uuid())
+  token_id       String
+  token_quantity Float
+  buy_date       String
+  amount_paid    Float
+  user_id        String
+  user           User   @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "hold_user_id_idx")
+  @@map("positions")
+}
+
+model History {
+  id      String @id @default(uuid())
+  user_id String
+  balance Float
+  user    User   @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+  @@map("history")
+}
